@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Зоопарк</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Животные в зоопарке</h1>
+    <a href="/add">Добавить животное</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Вид</th>
+                <th>Возраст</th>
+                <th>Пол</th>
+                <th>Вольер</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% animals.forEach(animal => { %>
+                <tr>
+                    <td><%= animal.name %></td>
+                    <td><%= animal.species %></td>
+                    <td><%= animal.age %></td>
+                    <td><%= animal.gender %></td>
+                    <td><%= animal.enclosure %></td>
+                    <td>
+                        <form action="/delete/<%= animal.id %>" method="POST">
+                            <button type="submit">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить животное</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Добавить новое животное</h1>
+    <form method="POST" action="/add">
+        <label>Имя:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Вид:</label><br>
+        <input type="text" name="species" required><br><br>
+
+        <label>Возраст:</label><br>
+        <input type="number" name="age"><br><br>
+
+        <label>Пол:</label><br>
+        <select name="gender">
+            <option value="Самец">Самец</option>
+            <option value="Самка">Самка</option>
+        </select><br><br>
+
+        <label>Вольер:</label><br>
+        <input type="text" name="enclosure"><br><br>
+
+        <button type="submit">Добавить</button>
+    </form>
+    <br>
+    <a href="/">Назад</a>
+</body>
+</html>
