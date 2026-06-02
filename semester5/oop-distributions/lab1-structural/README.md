@@ -46,10 +46,12 @@
 <img width="945" height="468" alt="image" src="https://github.com/user-attachments/assets/e026f0ab-bfbc-4db6-9e4f-c0b90a20d820" />
 
 Средние: 0.9981 и 0.9944
+
 Дисперсии: 1.3768 и 1.3662
 
 б) Смесь распределений
 <img width="945" height="468" alt="image" src="https://github.com/user-attachments/assets/14eefda3-e63d-4deb-8cb1-882f90863b9f" />
 
 Средние: 1.4910 и 1.4716
+
 Дисперсии: 5.4620 и 5.4647
