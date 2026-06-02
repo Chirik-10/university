@@ -81,6 +81,7 @@
 | Повторное использование | Единый шаблон _Layout.cshtml для всех страниц |
 
 ## Структура проекта
+'''
 InternetShop/
   Controllers/
     HomeController.cs # Главная, поиск, фильтрация
@@ -103,3 +104,4 @@ InternetShop/
     images/ # Аватары, фото товаров
   appsettings.json # Строка подключения к БД
   Program.cs # Точка входа
+'''
