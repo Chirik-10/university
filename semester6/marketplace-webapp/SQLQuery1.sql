@@ -1,0 +1,1 @@
+﻿UPDATE Users SET Role = 'Admin' WHERE Email = 'admin@shop.ru'

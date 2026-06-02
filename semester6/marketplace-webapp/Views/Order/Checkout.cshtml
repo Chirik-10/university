@@ -1,0 +1,76 @@
+﻿@model List<InternetShop.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Оформление заказа";
+    var total = Model?.Sum(i => i.Total) ?? 0;
+    var userAddress = ViewBag.UserAddress ?? "";
+}
+
+<h2 style="color: #d46b8c;">Оформление заказа</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 15px; margin-bottom: 20px;">
+        @TempData["Error"]
+    </div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <p>Корзина пуста</p>
+    <a href="/" style="display: inline-block; padding: 12px 28px; background: #d47a92; color: white; text-decoration: none; border-radius: 40px;">
+        Вернуться в каталог
+    </a>
+}
+else
+{
+    <div style="background: #fce4ec; padding: 25px; border-radius: 20px;">
+        <h3 style="color: #d46b8c;">Ваш заказ</h3>
+
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #e89aaf; color: white;">
+                    <th style="padding: 10px; text-align: center;">Товар</th>
+                    <th style="padding: 10px; text-align: center;">Количество</th>
+                    <th style="padding: 10px; text-align: center;">Цена</th>
+                    <th style="padding: 10px; text-align: center;">Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@item.ProductName</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@item.Quantity шт.</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@item.Price.ToString("C")</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@item.Total.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right; padding: 10px;"><strong>Итого:</strong></td>
+                    <td style="padding: 10px; text-align: center;"><strong>@total.ToString("C")</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div style="margin: 25px 0;">
+            <h4 style="color: #d46b8c;">Адрес доставки</h4>
+            <form method="post" action="/Order/Confirm">
+                <textarea name="address" id="address" style="width: 100%; padding: 12px; border: 1px solid #f0d3d8; border-radius: 16px;" rows="3" placeholder="Введите ваш адрес доставки">@userAddress</textarea>
+                <div style="margin-top: 10px;">
+                    <small style="color: #d46b8c;">Вы можете изменить адрес при оформлении заказа</small>
+                </div>
+                <div style="margin-top: 25px; display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button type="submit" style="padding: 12px 28px; background: #d47a92; color: white; border: none; border-radius: 40px; cursor: pointer;">
+                        Подтвердить заказ
+                    </button>
+                    <a href="/Cart" style="padding: 12px 28px; background: #d47a92; color: white; text-decoration: none; border-radius: 40px; text-align: center;">
+                        Вернуться в корзину
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+}

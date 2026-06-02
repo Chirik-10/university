@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<h2>Регистрация</h2>
+
+<div style="max-width: 400px; margin: 0 auto;">
+    @if (ViewBag.Error != null)
+    {
+        <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+            @ViewBag.Error
+        </div>
+    }
+
+    <form method="post" action="/Account/Register" id="registerForm">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Имя:</label>
+            <input type="text" name="Name" id="Name" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" />
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Email:</label>
+            <input type="email" name="Email" id="Email" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" />
+            <span id="emailError" style="color: red; font-size: 12px; display: none;"></span>
+            <span id="emailOk" style="color: green; font-size: 12px; display: none;">Email свободен</span>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Пароль:</label>
+            <input type="password" name="Password" id="Password" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" />
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Подтверждение пароля:</label>
+            <input type="password" name="ConfirmPassword" id="ConfirmPassword" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" />
+            <span id="passwordMatch" style="font-size: 12px;"></span>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">
+            Зарегистрироваться
+        </button>
+    </form>
+
+    <div style="margin-top: 15px; text-align: center;">
+        <a href="/Account/Login">Уже есть аккаунт? Войти</a>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // AJAX проверка email
+        $('#Email').on('blur', function() {
+            var email = $(this).val();
+            if (email === '') return;
+
+            $.ajax({
+                url: '/Account/CheckEmail',
+                type: 'POST',
+                data: { email: email },
+                success: function(response) {
+                    if (response.exists) {
+                        $('#emailError').text('Этот email уже зарегистрирован').show();
+                        $('#emailOk').hide();
+                        $('#Email').css('border-color', 'red');
+                    } else {
+                        $('#emailError').hide();
+                        $('#emailOk').show();
+                        $('#Email').css('border-color', 'green');
+                    }
+                }
+            });
+        });
+
+        // Проверка совпадения паролей
+        $('#ConfirmPassword').on('input', function() {
+            var password = $('#Password').val();
+            var confirm = $(this).val();
+
+            if (password === confirm && password !== '') {
+                $('#passwordMatch').text('Пароли совпадают').css('color', 'green');
+                $('#ConfirmPassword').css('border-color', 'green');
+            } else if (confirm !== '') {
+                $('#passwordMatch').text('Пароли не совпадают').css('color', 'red');
+                $('#ConfirmPassword').css('border-color', 'red');
+            } else {
+                $('#passwordMatch').text('');
+                $('#ConfirmPassword').css('border-color', '#ddd');
+            }
+        });
+
+        $('#Password').on('input', function() {
+            var confirm = $('#ConfirmPassword').val();
+            if (confirm !== '') {
+                var password = $(this).val();
+                if (password === confirm) {
+                    $('#passwordMatch').text('Пароли совпадают').css('color', 'green');
+                    $('#ConfirmPassword').css('border-color', 'green');
+                } else {
+                    $('#passwordMatch').text('Пароли не совпадают').css('color', 'red');
+                    $('#ConfirmPassword').css('border-color', 'red');
+                }
+            }
+        });
+    });
+</script>

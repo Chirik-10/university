@@ -1,0 +1,37 @@
+﻿@model IEnumerable<InternetShop.Models.Product>
+
+@if (!Model.Any())
+{
+    <p>Товары не найдены</p>
+}
+else
+{
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        @foreach (var product in Model)
+        {
+            <div style="border: 1px solid #f0d3d8; padding: 15px; width: 250px; border-radius: 25px; text-align: center; background: white;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 200px;">
+                    <img src="/images/@product.Image" alt="@product.Name"
+                         style="max-width: 200px; max-height: 200px; object-fit: contain;" />
+                </div>
+                <h3 style="color: #d46b8c;">@product.Name</h3>
+                <p style="font-size: 18px; color: #e8a9b5; font-weight: bold;">@product.Price.ToString("C")</p>
+                <p>В наличии: @product.Stock</p>
+                <p>Категория: @product.Category?.Name</p>
+
+                <form method="post" action="/Cart/AddToCart">
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <input type="hidden" name="productName" value="@product.Name" />
+                    <input type="hidden" name="price" value="@product.Price" />
+                    <input type="hidden" name="image" value="@product.Image" />
+                    <input type="hidden" name="stock" value="@product.Stock" />
+                    <button type="submit"
+                            style="width: 100%; padding: 10px; background: #e8a9b5; color: white; border: none; border-radius: 40px; cursor: pointer; @(product.Stock == 0 ? "opacity: 0.5; cursor: not-allowed;" : "")"
+                            @(product.Stock == 0 ? "disabled" : "")>
+                        В корзину
+                    </button>
+                </form>
+            </div>
+        }
+    </div>
+}

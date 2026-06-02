@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Интернет-магазин</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #fff5f7;
+        }
+
+        .navbar {
+            background: #e89aaf;
+            color: white;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 0;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+            .navbar-right a, .navbar-right span {
+                font-family: 'Quicksand', sans-serif;
+                font-weight: 500;
+            }
+
+            .navbar-right a {
+                color: white;
+                text-decoration: none;
+                padding: 8px 15px;
+                border-radius: 40px;
+                transition: all 0.3s;
+            }
+
+        .btn-login {
+            background: #d47a92;
+        }
+
+            .btn-login:hover {
+                background: #c0647c;
+                transform: translateY(-2px);
+            }
+
+        .btn-cart {
+            background: #d47a92;
+            position: relative;
+        }
+
+            .btn-cart:hover {
+                background: #c0647c;
+                transform: translateY(-2px);
+            }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b81;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .profile-link {
+            background: #d47a92;
+        }
+
+            .profile-link:hover {
+                background: #c0647c;
+                transform: translateY(-2px);
+            }
+
+        .btn-admin {
+            background: #d47a92;
+        }
+
+            .btn-admin:hover {
+                background: #c0647c;
+                transform: translateY(-2px);
+            }
+
+        .user-name {
+            color: white;
+            margin-right: 5px;
+            font-weight: 500;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-height: 400px;
+        }
+
+        .alert-success {
+            background: #fce4ec;
+            color: #d46b8c;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f8d0dc;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer {
+            background: #e89aaf;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        button, .btn, a.btn, .btn-add, .btn-edit, .btn-delete, .btn-confirm, .btn-reject,
+        .save-btn, .edit-btn, .cancel-btn, .upload-btn, input[type="submit"] {
+            background: #d47a92 !important;
+            border: none !important;
+            border-radius: 40px !important;
+            color: white !important;
+            padding: 10px 24px !important;
+            cursor: pointer !important;
+            text-decoration: none !important;
+            display: inline-block !important;
+            font-weight: 500 !important;
+            font-family: 'Quicksand', sans-serif !important;
+            transition: all 0.3s !important;
+        }
+
+            button:hover, .btn:hover, a.btn:hover, .btn-add:hover, .btn-edit:hover,
+            .save-btn:hover, .edit-btn:hover, .upload-btn:hover {
+                background: #c0647c !important;
+                transform: translateY(-2px);
+            }
+
+        .btn-delete, .btn-reject, .remove-btn, .cancel-btn {
+            background: #b85c74 !important;
+        }
+
+            .btn-delete:hover, .btn-reject:hover, .remove-btn:hover, .cancel-btn:hover {
+                background: #a04a60 !important;
+            }
+
+        .btn-edit, a.btn-edit {
+            background: #ffb347 !important;
+        }
+
+            .btn-edit:hover, a.btn-edit:hover {
+                background: #e6992e !important;
+            }
+
+        input, textarea, select {
+            border-radius: 16px !important;
+            border: 1px solid #f0d3d8;
+            padding: 12px 16px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 14px;
+        }
+
+        textarea {
+            border-radius: 16px !important;
+        }
+
+            input:focus, textarea:focus, select:focus {
+                outline: none;
+                border-color: #d47a92;
+                box-shadow: 0 0 0 3px rgba(212, 122, 146, 0.2);
+            }
+
+        table {
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            table th {
+                background: #e89aaf;
+                color: white;
+                padding: 12px;
+                text-align: center;
+                font-weight: 600;
+                font-family: 'Quicksand', sans-serif;
+            }
+
+            table td {
+                padding: 10px;
+                border-bottom: 1px solid #f0d3d8;
+                text-align: center;
+                font-family: 'Quicksand', sans-serif;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand" style="display: flex; align-items: center; gap: 10px;">
+                <img src="/images/cotton-candy.png" alt="Логотип" style="height: 45px; width: auto; max-width: 60px; object-fit: contain;" />
+                Интернет-магазин
+            </a>
+            <div class="navbar-right">
+                @{
+                    var userId = Context.Session.GetInt32("UserId");
+                    var userName = Context.Session.GetString("UserName");
+                    var userRole = Context.Session.GetString("UserRole");
+                    var cartCount = Context.Session.GetInt32("CartCount") ?? 0;
+                }
+                @if (userId != null)
+                {
+                    <span class="user-name">Привет, @userName!</span>
+                    <a href="/Profile" class="profile-link">Мой профиль</a>
+                    <a href="/Order/MyOrders" class="profile-link">Мои заказы</a>
+                    <a href="/Cart" class="btn-cart">
+                        Корзина
+                        @if (cartCount > 0)
+                        {
+                            <span class="cart-badge">@cartCount</span>
+                        }
+                    </a>
+                    @if (userRole == "Admin")
+                    {
+                        <a href="/Admin/Products" class="btn-admin">Товары</a>
+                        <a href="/Admin/Orders" class="btn-admin">Заказы</a>
+                    }
+                    <a href="/Account/Logout" class="btn-login">Выход</a>
+                }
+                else
+                {
+                    <a href="/Cart" class="btn-cart">
+                        Корзина
+                        @if (cartCount > 0)
+                        {
+                            <span class="cart-badge">@cartCount</span>
+                        }
+                    </a>
+                    <a href="/Account/Login" class="btn-login">Войти</a>
+                    <a href="/Account/Register" class="btn-login">Регистрация</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        @RenderBody()
+    </div>
+    <div class="footer">
+        Интернет-магазин. Все права защищены.
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

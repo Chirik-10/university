@@ -1,0 +1,135 @@
+﻿@model IEnumerable<InternetShop.Models.Order>
+
+@{
+    ViewData["Title"] = "Управление заказами";
+}
+
+<h2 style="color: #d46b8c;">Управление заказами</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div style="background: #fce4ec; color: #d46b8c; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #f8d0dc;">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+        @TempData["Error"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>Нет заказов</p>
+}
+else
+{
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #e89aaf; color: white;">
+                <th style="padding: 10px; text-align: center;">№ заказа</th>
+                <th style="padding: 10px; text-align: center;">Покупатель</th>
+                <th style="padding: 10px; text-align: center;">Дата</th>
+                <th style="padding: 10px; text-align: center;">Сумма</th>
+                <th style="padding: 10px; text-align: center;">Статус</th>
+                <th style="padding: 10px; text-align: center;">Адрес</th>
+                <th style="padding: 10px; text-align: center;">Состав заказа</th>
+                <th style="padding: 10px; text-align: center;">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@order.Id</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@order.User?.Name</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@order.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@order.TotalAmount.ToString("C")</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">
+                        @if (order.Status == "New")
+                        {
+                            <span style="color: blue; font-weight: bold;">Новый</span>
+                        }
+                        else if (order.Status == "Confirmed")
+                        {
+                            <span style="color: green; font-weight: bold;">Подтверждён</span>
+                        }
+                        else if (order.Status == "Cancelled")
+                        {
+                            <span style="color: red; font-weight: bold;">Отклонён</span>
+                            if (!string.IsNullOrEmpty(order.RejectReason))
+                            {
+                                <div><small>Причина: @order.RejectReason</small></div>
+                            }
+                        }
+                    </td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">@order.Address</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: left;">
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <div>@item.Product?.Name x @item.Quantity шт. = @((item.Quantity * item.PriceAtOrder).ToString("C"))</div>
+                        }
+                    </td>
+                    <td style="padding: 10px; border-bottom: 1px solid #f0d3d8; text-align: center;">
+                        @if (order.Status == "New")
+                        {
+                            <form method="post" action="/Admin/UpdateOrderStatus" style="display: inline-block; margin-right: 10px;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="orderId" value="@order.Id" />
+                                <input type="hidden" name="status" value="Confirmed" />
+                                <button type="submit" style="padding: 6px 16px; background: #d47a92; color: white; border: none; border-radius: 40px; cursor: pointer;">Подтвердить</button>
+                            </form>
+
+                            <button type="button" onclick="openRejectModal(@order.Id)" style="padding: 6px 16px; background: #b85c74; color: white; border: none; border-radius: 40px; cursor: pointer;">Отклонить</button>
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Модальное окно для причины отказа -->
+<div id="rejectModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 20px; min-width: 300px;">
+        <h3 style="color: #d46b8c;">Отклонение заказа</h3>
+        <form method="post" action="/Admin/UpdateOrderStatus">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="orderId" id="rejectOrderId" value="" />
+            <input type="hidden" name="status" value="Cancelled" />
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px;">Причина отказа:</label>
+                <textarea name="rejectReason" id="rejectReason" rows="3" style="width: 100%; padding: 12px; border: 1px solid #f0d3d8; border-radius: 16px;" required></textarea>
+            </div>
+            <div style="text-align: right;">
+                <button type="button" onclick="closeRejectModal()" style="padding: 8px 20px; background: #b85c74; color: white; border: none; border-radius: 40px; cursor: pointer; margin-right: 10px;">Отмена</button>
+                <button type="submit" style="padding: 8px 20px; background: #d47a92; color: white; border: none; border-radius: 40px; cursor: pointer;">Отклонить заказ</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openRejectModal(orderId) {
+        document.getElementById('rejectOrderId').value = orderId;
+        document.getElementById('rejectModal').style.display = 'block';
+        document.getElementById('rejectReason').value = '';
+    }
+
+    function closeRejectModal() {
+        document.getElementById('rejectModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        var modal = document.getElementById('rejectModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>

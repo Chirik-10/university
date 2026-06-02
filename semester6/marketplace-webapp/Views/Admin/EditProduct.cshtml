@@ -1,0 +1,96 @@
+﻿@model InternetShop.Models.Product
+@{
+    ViewData["Title"] = "Редактирование товара";
+    var categories = ViewBag.Categories as List<InternetShop.Models.Category>;
+}
+
+<h2>Редактирование товара</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+        @TempData["Error"]
+    </div>
+}
+
+<div style="max-width: 500px;">
+    <form method="post" action="/Admin/EditProduct" enctype="multipart/form-data">
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Название товара</label>
+            <input type="text" name="Name" value="@Model.Name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" required />
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Описание</label>
+            <textarea name="Description" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">@Model.Description</textarea>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Цена</label>
+            <input type="number" step="0.01" name="Price" value="@Model.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" required />
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Категория</label>
+            <select name="CategoryId" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" required>
+                <option value="">-- Выберите категорию --</option>
+                @if (categories != null)
+                {
+                    foreach (var cat in categories)
+                    {
+                        if (cat.Id == Model.CategoryId)
+                        {
+                            <option value="@cat.Id" selected>@cat.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@cat.Id">@cat.Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Количество на складе</label>
+            <input type="number" name="Stock" value="@Model.Stock" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" required />
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Текущее изображение</label>
+            @if (!string.IsNullOrEmpty(Model.Image) && Model.Image != "default.png")
+            {
+                <div>
+                    <img src="/images/@Model.Image" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px;" />
+                    <p>@Model.Image</p>
+                </div>
+            }
+            else
+            {
+                <p>Нет изображения</p>
+            }
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Новое изображение</label>
+            <input type="file" name="imageFile" accept="image/*" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;" />
+            <small style="color: #666;">Выберите файл .jpg или .png (оставьте пустым, чтобы не менять)</small>
+        </div>
+
+        <button type="submit" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">
+            Сохранить изменения
+        </button>
+        <a href="/Admin/Products" style="padding: 10px 20px; background: #666; color: white; text-decoration: none; border-radius: 3px; margin-left: 10px;">
+            Отмена
+        </a>
+    </form>
+</div>

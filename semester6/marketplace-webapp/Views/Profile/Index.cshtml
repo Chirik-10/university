@@ -1,0 +1,297 @@
+﻿@model InternetShop.Models.User
+
+@{
+    ViewData["Title"] = "Мой профиль";
+}
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background: #e89aaf;
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        border-radius: 50%;
+        background: white;
+        padding: 5px;
+        margin-bottom: 15px;
+    }
+
+    .upload-btn {
+        background: #d47a92;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 40px;
+        cursor: pointer;
+        margin-top: 5px;
+        transition: all 0.3s;
+    }
+
+        .upload-btn:hover {
+            background: #c0647c;
+            transform: translateY(-2px);
+        }
+
+    .profile-body {
+        padding: 30px;
+    }
+
+    .info-group {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0d3d8;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #d46b8c;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .edit-btn {
+        background: #d47a92;
+        color: white;
+        border: none;
+        padding: 6px 18px;
+        border-radius: 40px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .edit-btn:hover {
+            background: #c0647c;
+            transform: translateY(-2px);
+        }
+
+    .save-btn {
+        background: #d47a92;
+        color: white;
+        border: none;
+        padding: 6px 18px;
+        border-radius: 40px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .save-btn:hover {
+            background: #c0647c;
+            transform: translateY(-2px);
+        }
+
+    .cancel-btn {
+        background: #b85c74;
+        color: white;
+        border: none;
+        padding: 6px 18px;
+        border-radius: 40px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .cancel-btn:hover {
+            background: #a04a60;
+            transform: translateY(-2px);
+        }
+
+    .edit-input {
+        padding: 10px 15px;
+        border: 1px solid #f0d3d8;
+        border-radius: 40px;
+        width: 250px;
+    }
+
+    .message {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        display: none;
+    }
+
+    .message-success {
+        background: #fce4ec;
+        color: #d46b8c;
+        border: 1px solid #f8d0dc;
+    }
+
+    .message-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <img id="avatar" src="@(Model.AvatarPath ?? "/images/avatars/default-avatar.png")" class="avatar" />
+        <br />
+        <button class="upload-btn" onclick="document.getElementById('avatarInput').click()">Загрузить аватар</button>
+        <input type="file" id="avatarInput" accept="image/*" style="display: none;" />
+        <h2 id="userNameDisplay" style="color: white;">@Model.Name</h2>
+        <p style="color: rgba(255,255,255,0.9);">@Model.Email</p>
+    </div>
+
+    <div class="profile-body">
+        <div id="message" class="message"></div>
+
+        <div class="info-group">
+            <div class="info-label">Имя</div>
+            <div class="info-value" id="nameContainer">
+                <span id="nameText">@Model.Name</span>
+                <button class="edit-btn" onclick="showEditName()">Редактировать</button>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Email (логин)</div>
+            <div class="info-value" id="emailContainer">
+                <span id="emailText">@Model.Email</span>
+                <button class="edit-btn" onclick="showEditEmail()">Редактировать</button>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Адрес доставки</div>
+            <div class="info-value" id="addressContainer">
+                <span id="addressText">@(string.IsNullOrEmpty(Model.Address) ? "Не указан" : Model.Address)</span>
+                <button class="edit-btn" onclick="showEditAddress()">Редактировать</button>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Пароль</div>
+            <div class="info-value">
+                <span>••••••••</span>
+                <button class="edit-btn" onclick="showChangePassword()">Изменить</button>
+            </div>
+            <div id="passwordForm" style="display: none; margin-top: 15px;">
+                <input type="password" id="currentPassword" placeholder="Текущий пароль" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 40px;" />
+                <input type="password" id="newPassword" placeholder="Новый пароль" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 40px;" />
+                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 40px;" />
+                <button class="save-btn" onclick="savePassword()">Сохранить</button>
+                <button class="cancel-btn" onclick="hideChangePassword()">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // (скрипты без изменений, работают как раньше)
+    function showMessage(text, type) {
+        var msg = document.getElementById('message');
+        msg.innerText = text;
+        msg.className = 'message message-' + type;
+        msg.style.display = 'block';
+        setTimeout(function() { msg.style.display = 'none'; }, 3000);
+    }
+
+    function showEditName() {
+        var container = document.getElementById('nameContainer');
+        var current = document.getElementById('nameText').innerText;
+        container.innerHTML = '<input type="text" id="editNameInput" class="edit-input" value="' + current + '" /><button class="save-btn" onclick="saveName()">Сохранить</button><button class="cancel-btn" onclick="location.reload()">Отмена</button>';
+    }
+
+    function saveName() {
+        var newName = document.getElementById('editNameInput').value;
+        fetch('/Profile/UpdateName', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'newName=' + encodeURIComponent(newName)
+        }).then(r => r.json()).then(d => {
+            if (d.success) { showMessage(d.message, 'success'); setTimeout(function() { location.reload(); }, 1000); }
+            else { showMessage(d.message, 'error'); }
+        });
+    }
+
+    function showEditEmail() {
+        var container = document.getElementById('emailContainer');
+        var current = document.getElementById('emailText').innerText;
+        container.innerHTML = '<input type="email" id="editEmailInput" class="edit-input" value="' + current + '" /><button class="save-btn" onclick="saveEmail()">Сохранить</button><button class="cancel-btn" onclick="location.reload()">Отмена</button>';
+    }
+
+    function saveEmail() {
+        var newEmail = document.getElementById('editEmailInput').value;
+        fetch('/Profile/UpdateEmail', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'newEmail=' + encodeURIComponent(newEmail)
+        }).then(r => r.json()).then(d => {
+            if (d.success) { showMessage(d.message, 'success'); setTimeout(function() { location.reload(); }, 1000); }
+            else { showMessage(d.message, 'error'); }
+        });
+    }
+
+    function showEditAddress() {
+        var container = document.getElementById('addressContainer');
+        var current = document.getElementById('addressText').innerText;
+        var val = current === 'Не указан' ? '' : current;
+        container.innerHTML = '<input type="text" id="editAddressInput" class="edit-input" value="' + val + '" /><button class="save-btn" onclick="saveAddress()">Сохранить</button><button class="cancel-btn" onclick="location.reload()">Отмена</button>';
+    }
+
+    function saveAddress() {
+        var newAddress = document.getElementById('editAddressInput').value;
+        fetch('/Profile/UpdateAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'newAddress=' + encodeURIComponent(newAddress)
+        }).then(r => r.json()).then(d => {
+            if (d.success) { showMessage(d.message, 'success'); setTimeout(function() { location.reload(); }, 1000); }
+            else { showMessage(d.message, 'error'); }
+        });
+    }
+
+    function showChangePassword() {
+        document.getElementById('passwordForm').style.display = 'block';
+    }
+
+    function hideChangePassword() {
+        document.getElementById('passwordForm').style.display = 'none';
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+    }
+
+    function savePassword() {
+        var curr = document.getElementById('currentPassword').value;
+        var newPwd = document.getElementById('newPassword').value;
+        var conf = document.getElementById('confirmPassword').value;
+        fetch('/Profile/UpdatePassword', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'currentPassword=' + encodeURIComponent(curr) + '&newPassword=' + encodeURIComponent(newPwd) + '&confirmPassword=' + encodeURIComponent(conf)
+        }).then(r => r.json()).then(d => {
+            if (d.success) { showMessage(d.message, 'success'); hideChangePassword(); }
+            else { showMessage(d.message, 'error'); }
+        });
+    }
+
+    document.getElementById('avatarInput').addEventListener('change', function(e) {
+        var formData = new FormData();
+        formData.append('avatar', e.target.files[0]);
+        fetch('/Profile/UploadAvatar', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(d => { if (d.success) { document.getElementById('avatar').src = d.avatarPath + '?t=' + new Date().getTime(); showMessage(d.message, 'success'); } else { showMessage(d.message, 'error'); } });
+    });
+</script>
