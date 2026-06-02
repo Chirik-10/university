@@ -84,24 +84,46 @@
 ```
 InternetShop/
   Controllers/
-    HomeController.cs # Главная, поиск, фильтрация
-    AccountController.cs # Регистрация, вход, проверка email
-    CartController.cs # Корзина (сессии + AJAX)
-    OrderController.cs # Оформление, история заказов
+    AccountController.cs # Регистрация, вход, проверка email 
     AdminController.cs # Управление товарами и заказами
+    CartController.cs # Корзина 
+    HomeController.cs # Главная страница, поиск, фильтрация 
+    OrderController.cs # Оформление заказа, история заказов
+    ProfileController.cs # Личный кабинет
   Models/
-    ApplicationDbContext.cs # Контекст EF Core
-    User.cs, Product.cs, Order.cs ...
-    ViewModels/ # Модели для представлений
-  Views/ # Представления (Razor)
-    Shared/_Layout.cshtml # Единый макет
-    Home/Index.cshtml # Каталог (фильтры AJAX)
-    Cart/Index.cshtml # Корзина (AJAX +/-)
-    Admin/Products.cshtml # Управление товарами
+    CartItem.cs # Карточка товара
+    Category.cs # Категория товара
+    Order.cs # Заказ
+    Product.cs # Товар
+    User.cs # Пользователь
+  Views/ # Представления
+    Account/
+      Login.cshtml # Страница входа в аккаунт
+      Register.cshtml # Страница регистрации
+    Admin/
+      CreateProduct.cshtml # Добавление товара
+      EditProduct.cshtml # Редактирование товара
+      Orders.cshtml # Все заказы
+      Products.cshtml # Товары
+    Cart/
+      Index.cshtml # Корзина
+    Home/
+      Index.cshtml # Главная страница
+      _ProductsGrid.cshtml # Отображение товаров
+    Order/
+      Checkout.cshtml # Страница оформления заказа
+      MyOrder.cshtml # История заказов пользователя
+    Profil/
+      Index.cshtml # Профиль
+    Shared/
+      _Layout.cshtml # Единый шаблон
+    _ViewStart.cshtml # Настройка Layout по умолчанию
   wwwroot/
     css/
-    js/ # AJAX-скрипты
-    images/ # Аватары, фото товаров
-  appsettings.json # Строка подключения к БД
+      site.css # Стиль сайта
+    images/ # Аватары пользователей, иконки товаров
+    js/
+      site.js
+  appsettings.json # Подключение к БД
   Program.cs # Точка входа
 ```
