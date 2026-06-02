@@ -81,7 +81,7 @@
 | Повторное использование | Единый шаблон _Layout.cshtml для всех страниц |
 
 ## Структура проекта
-'''
+'''plaintext
 InternetShop/
   Controllers/
     HomeController.cs # Главная, поиск, фильтрация
