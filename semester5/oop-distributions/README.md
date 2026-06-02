@@ -11,6 +11,9 @@
 
 ## Структура проекта
 lab1-structural/ - Структурный подход
+
 lab2-class-basic/ - Класс Primary для основного распределения
+
 lab3-class-mixture-empiric/ - Классы Mixture и Empiric (композиция, динамическая память)
+
 lab4-interfaces-template/ - Интерфейсы IDistribution/IPersistent, шаблонный Mixture
