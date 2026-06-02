@@ -26,7 +26,7 @@ const table_row table_vals[] = {
 
 const int table_size = 8;
 
-// 6.1. Тесты для основного распределения
+// 1. Тесты для основного распределения
 void test_base_distribution() {
     // Сравнение с табличными значениями для разных ν
     printf("\nСравнение с табличными значениями\n");
@@ -72,7 +72,7 @@ void test_base_distribution() {
     printf("  Дисперсия: %.6f\n", D_ss);
 }
 
-// 6.2. Тесты для смеси распределений
+// 2. Тесты для смеси распределений
 void test_mixture_distributions() {
     printf("\n6.2. Тесты для смеси распределений\n");
     printf("\n6.2.1. Тривиальная смесь (mu1=mu2=10, lambda1=lambda2=2, nu1=nu2=1, p=0.5):\n");
